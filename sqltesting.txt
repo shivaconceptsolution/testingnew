@@ -1,0 +1,168 @@
+Microsoft Windows [Version 10.0.22000.1455]
+(c) Microsoft Corporation. All rights reserved.
+
+C:\Users\DELL>cd/
+
+C:\>cd xampp/mysql/bin
+
+C:\xampp\mysql\bin>mysql -u root -p
+Enter password:
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 41
+Server version: 10.4.27-MariaDB mariadb.org binary distribution
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> show databases;
++--------------------+
+| Database           |
++--------------------+
+| eroomrentnew       |
+| erromrent          |
+| information_schema |
+| jdbcexample        |
+| jdbcnew            |
+| mydb               |
+| mysql              |
+| performance_schema |
+| phpmyadmin         |
+| practicedb         |
+| schooldb           |
+| scsdigital         |
+| test               |
++--------------------+
+13 rows in set (0.001 sec)
+
+MariaDB [(none)]> create database testdb2;
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [(none)]> use testdb2;
+Database changed
+MariaDB [testdb2]> create table stu(rno int primary key,sname varchar(50));
+Query OK, 0 rows affected (0.028 sec)
+
+MariaDB [testdb2]> desc stu;
++-------+-------------+------+-----+---------+-------+
+| Field | Type        | Null | Key | Default | Extra |
++-------+-------------+------+-----+---------+-------+
+| rno   | int(11)     | NO   | PRI | NULL    |       |
+| sname | varchar(50) | YES  |     | NULL    |       |
++-------+-------------+------+-----+---------+-------+
+2 rows in set (0.024 sec)
+
+MariaDB [testdb2]> insert into stu(rno,sname) values (1001,'XYZ');
+Query OK, 1 row affected (0.015 sec)
+
+MariaDB [testdb2]> insert into stu(rno,sname) values (1002,'MNO');
+Query OK, 1 row affected (0.014 sec)
+
+MariaDB [testdb2]> select * from stu;
++------+-------+
+| rno  | sname |
++------+-------+
+| 1001 | XYZ   |
+| 1002 | MNO   |
++------+-------+
+2 rows in set (0.000 sec)
+
+MariaDB [testdb2]> update stu set sname='MNOP' where rno=1002;
+Query OK, 1 row affected (0.041 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+MariaDB [testdb2]> select * from stu;
++------+-------+
+| rno  | sname |
++------+-------+
+| 1001 | XYZ   |
+| 1002 | MNOP  |
++------+-------+
+2 rows in set (0.000 sec)
+
+MariaDB [testdb2]> delete from stu where rno=1002;
+Query OK, 1 row affected (0.015 sec)
+
+MariaDB [testdb2]> select * from stu;
++------+-------+
+| rno  | sname |
++------+-------+
+| 1001 | XYZ   |
++------+-------+
+1 row in set (0.000 sec)
+
+MariaDB [testdb2]> create table dept(deptid int primary key, deptname varchar(50));
+Query OK, 0 rows affected (0.023 sec)
+
+MariaDB [testdb2]> create table emp(empid int primary key,empname varchar(50),branch varchar(50),fees int,deptno int,constraint fk_emp_contraint foreign key(deptno) references dept(deptid));
+Query OK, 0 rows affected (0.038 sec)
+
+MariaDB [testdb2]> insert into dept values(10,'IT');
+Query OK, 1 row affected (0.004 sec)
+
+MariaDB [testdb2]> insert into dept values(20,'SALES');
+Query OK, 1 row affected (0.040 sec)
+
+MariaDB [testdb2]> insert into emp values(1001,'Ravi Kumar','CS',15000,10);
+Query OK, 1 row affected (0.041 sec)
+
+MariaDB [testdb2]> insert into emp values(1002,'Manish Kumar','IT',25000,20);
+Query OK, 1 row affected (0.014 sec)
+
+MariaDB [testdb2]> insert into emp values(1003,'Jay Kumar','IT',25000,200);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`testdb2`.`emp`, CONSTRAINT `fk_emp_contraint` FOREIGN KEY (`deptno`) REFERENCES `dept` (`deptid`))
+MariaDB [testdb2]> select * from dept;
++--------+----------+
+| deptid | deptname |
++--------+----------+
+|     10 | IT       |
+|     20 | SALES    |
++--------+----------+
+2 rows in set (0.001 sec)
+
+MariaDB [testdb2]> select * from emp;
++-------+--------------+--------+-------+--------+
+| empid | empname      | branch | fees  | deptno |
++-------+--------------+--------+-------+--------+
+|  1001 | Ravi Kumar   | CS     | 15000 |     10 |
+|  1002 | Manish Kumar | IT     | 25000 |     20 |
++-------+--------------+--------+-------+--------+
+2 rows in set (0.000 sec)
+
+MariaDB [testdb2]> select * from dept,emp where dept.deptid=emp.deptno;
++--------+----------+-------+--------------+--------+-------+--------+
+| deptid | deptname | empid | empname      | branch | fees  | deptno |
++--------+----------+-------+--------------+--------+-------+--------+
+|     10 | IT       |  1001 | Ravi Kumar   | CS     | 15000 |     10 |
+|     20 | SALES    |  1002 | Manish Kumar | IT     | 25000 |     20 |
++--------+----------+-------+--------------+--------+-------+--------+
+2 rows in set (0.013 sec)
+
+MariaDB [testdb2]> select * from emp,dept where dept.deptid=emp.deptno;
++-------+--------------+--------+-------+--------+--------+----------+
+| empid | empname      | branch | fees  | deptno | deptid | deptname |
++-------+--------------+--------+-------+--------+--------+----------+
+|  1001 | Ravi Kumar   | CS     | 15000 |     10 |     10 | IT       |
+|  1002 | Manish Kumar | IT     | 25000 |     20 |     20 | SALES    |
++-------+--------------+--------+-------+--------+--------+----------+
+2 rows in set (0.001 sec)
+
+MariaDB [testdb2]>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
